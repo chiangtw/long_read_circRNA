@@ -6,6 +6,8 @@ import os
 from pathlib import Path
 import subprocess
 
+long_read_circRNA_dir = os.environ.get('LONG_READ_CIRCRNA_DIR', '~/long_read_circRNA')
+
 class ArgumentCaller():
     
     __version__ = 2
@@ -51,7 +53,7 @@ Available subcommands:
         parser.add_argument('sample', help="Provide a sample input .fq.gz file that should be processed by the tool")
         parser.add_argument('--reference-path', default="./data", help="Provide a path for where the reference data is located. Default is './data'.")
         parser.add_argument('--species', default='human', choices=['human', 'mouse'], help="Select which species the sample that is from, and specify which species reference files should be used. Default is set to human.")
-        parser.add_argument('--script-path', default="~/long_read_circRNA/scripts", help="Specify where the long_read_circRNA scripts are located. By default it assumes that they are located at '~/long_read_circRNA/scripts'.")
+        parser.add_argument('--script-path', default="{}/scripts".format(long_read_circRNA_dir), help="Specify where the long_read_circRNA scripts are located. By default it assumes that they are located at '~/long_read_circRNA/scripts'.")
         parser.add_argument('--output-path', '-o', default=".", help="Provide a path for where the output should be saved. Default is the current directory. This will use the output-path and create a directory in that path based on the sample name provided.")
         parser.add_argument('--dry-run', action="store_true", help="Perform all of the input checks without starting the detection scripts")
         parser.add_argument('--keep-temp', action="store_true", help="Keep all of the temporary files.")
@@ -157,7 +159,7 @@ Available subcommands:
         parser.add_argument("--skip-human", action="store_true", help="Skip downloading the human reference files")
         parser.add_argument("--skip-mouse", action="store_true", help="Skip downloading the mouse reference files")
         parser.add_argument("--skip-testdata", action="store_true", help="Skip downloading the test data")
-        parser.add_argument("--installation-path", default="~/long_read_circRNA", help="Provide a path for where the script is installed. Default is ~/long_read_circRNA")
+        parser.add_argument("--installation-path", default=long_read_circRNA_dir, help="Provide a path for where the script is installed. Default is ~/long_read_circRNA")
         args = parser.parse_args(sys.argv[2:])
         
         skip_check = {True: "skip", False: "no"}
