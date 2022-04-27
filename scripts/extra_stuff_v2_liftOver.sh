@@ -59,6 +59,6 @@ cat circRNA_candidates.annotated.start.$lift.bed circRNA_candidates.annotated.en
 bedtools intersect -wo -f 1.0 -F 1.0 -a $sample.circRNA_candidates.annotated.combined.$lift.bed -b $comparison_dataset > $sample.circRNA_candidates.annotated.combined.$lift.human-matches.bed
 wc -l $sample.circRNA_candidates.annotated.combined.$lift.human-matches.bed $sample.circRNA_candidates.annotated.txt $comparison_dataset
 
-rm circRNA_candidates.annotated.forLiftover.start.bed circRNA_candidates.annotated.forLiftover.end.bed circRNA_candidates.annotated.start.*.bed circRNA_candidates.annotated.end.*.bed
+#rm circRNA_candidates.annotated.forLiftover.start.bed circRNA_candidates.annotated.forLiftover.end.bed circRNA_candidates.annotated.start.*.bed circRNA_candidates.annotated.end.*.bed
 
 

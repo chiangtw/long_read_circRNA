@@ -83,7 +83,7 @@ date
 
 # Remove non-standard chromosomes
 cat $sample.psl | grep -v "_random" | grep -v "_hap" | grep -v "chrUn_" > $sample.temp.psl
-rm $sample.psl
+#rm $sample.psl
 mv $sample.temp.psl $sample.psl
 cat $sample.psl | awk '{print $10}' | sort | uniq -c | sort -nrk 1,1 > mappings_per_read.txt
 cat mappings_per_read.txt | awk '{print $1}' | uniq -c | sort -nrk 1,1 > $sample.histogram_number_of_genomic_hits_per_read.txt
@@ -91,7 +91,7 @@ cat $sample.psl | perl $scriptFolder/psl2bed12.pl | sortBed > $sample.psl.bed
 bedtools bedtobam -i $sample.psl.bed -bed12 -g $genomeSize > $sample.bam
 samtools sort $sample.bam > $sample.sort.bam
 samtools index $sample.sort.bam
-rm $sample.bam
+#rm $sample.bam
 
 echo
 date
@@ -142,7 +142,7 @@ cat $sample.scan.Potential_multi-round_circRNA.psl.annot.bed | awk '{print $4}' 
 samtools faidx $sample.fa
 echo "Using samtools to make Potential_multi-round_circRNA fasta files for sample: "$sample.fa
 xargs samtools faidx $sample.fa < $sample.temp.read_names > $sample.Potential_multi-round_circRNA.fa
-rm temp.$sample.multi-round.count.txt $sample.temp.read_names
+#rm temp.$sample.multi-round.count.txt $sample.temp.read_names
 
 echo
 date
@@ -201,7 +201,7 @@ echo
 cat base_list_exon-match.annot.prefilter.bed | grep -v chrM | grep -v Rn45s > $sample.base_list_exon-match.annot.bed
 
 
-rm base_list_exon-match.temp base_list_exon-match.temp3.bed base_list_exon-match.temp4.bed base_list_exon-match.annot.prefilter.bed
+#rm base_list_exon-match.temp base_list_exon-match.temp3.bed base_list_exon-match.temp4.bed base_list_exon-match.annot.prefilter.bed
 
 
 # For v 5.5 I increased the stringency. See below
@@ -291,17 +291,17 @@ cat no_exon_match_reads.bed | uniq | grep "\.[[:space:]]\.[[:space:]]\." | sortB
 
 
 ## Delete temp files
-rm temp.circ.hits $sample.scan.circRNA.psl.annot.combine.sort.temp temp_exon-ends_nohit_uniq $sample.scan.circRNA.psl.annot.combine.correct.full.bed circRNA_name.temp $sample.scan.circRNA.psl.annot.combine.correct.bed  $sample.scan.circRNA.psl.annot.combine.sort.temp2 $sample.scan.circRNA.psl.annot.combine.sort.temp3
-rm -r $temp_sort
-rm temp* $sample.scan.Potential_multi-round_circRNA.bam $sample.scan.Potential_multi-round_circRNA.psl.bed $sample.scan.Potential_multi-round_circRNA.psl
+#rm temp.circ.hits $sample.scan.circRNA.psl.annot.combine.sort.temp temp_exon-ends_nohit_uniq $sample.scan.circRNA.psl.annot.combine.correct.full.bed circRNA_name.temp $sample.scan.circRNA.psl.annot.combine.correct.bed  $sample.scan.circRNA.psl.annot.combine.sort.temp2 $sample.scan.circRNA.psl.annot.combine.sort.temp3
+#rm -r $temp_sort
+#rm temp* $sample.scan.Potential_multi-round_circRNA.bam $sample.scan.Potential_multi-round_circRNA.psl.bed $sample.scan.Potential_multi-round_circRNA.psl
 #rm $sample.scan.circRNA.psl.annot.combine.circID.bed $sample.scan.circRNA.psl.annot.combine.sort.txt $sample.base_list_exon-match.annot.bed
-rm $sample.scan.Potential_multi-round_circRNA.psl.merge.bed $sample.scan.Potential_multi-round_circRNA.sort.bam.bai
-rm $sample.scan.Potential_multi-round_circRNA.sort.bam
+#rm $sample.scan.Potential_multi-round_circRNA.psl.merge.bed $sample.scan.Potential_multi-round_circRNA.sort.bam.bai
+#rm $sample.scan.Potential_multi-round_circRNA.sort.bam
 #rm $sample.scan.circRNA.bam $sample.scan.circRNA.psl.annot.bed $sample.scan.circRNA.psl.annot.txt $sample.scan.circRNA.psl $sample.sort.bam $sample.scan.circRNA.psl.bed
 #rm $sample.sort.bam.bai $sample.psl.bed $sample.fa.fai $sample.psl $sample.fa no_exon_no_circRNA.bed
-rm base_list_exon-match.bed no_exon_match_reads.bed circBase.no_exon_match_reads_circIDs.txt circAtlas.no_exon_match_reads_circIDs.txt CIRCpedia.no_exon_match_reads_circIDs.txt
+#rm base_list_exon-match.bed no_exon_match_reads.bed circBase.no_exon_match_reads_circIDs.txt circAtlas.no_exon_match_reads_circIDs.txt CIRCpedia.no_exon_match_reads_circIDs.txt
 #rm base_list_no-exon.cirBaseID.annot.prefilter.bed
-rm mappings_per_read.txt $sample.scan.psl $sample.circBase_no_exon_match_reads.bed #$sample.base_list_no-exon.cirBaseID.annot.bed
+#rm mappings_per_read.txt $sample.scan.psl $sample.circBase_no_exon_match_reads.bed #$sample.base_list_no-exon.cirBaseID.annot.bed
 
 echo
 date

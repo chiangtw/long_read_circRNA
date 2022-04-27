@@ -95,7 +95,7 @@ mv $sample.novel.exons.2reads.filter0.bed $sample.novel.exons.2reads.filter.bed
 
 
 wc -l $sample.scan.circRNA.psl.split.merge.flank2.allExons.notGencode.bed $sample.novel.exons.2reads.bed $sample.novel.exons.2reads.filter00.bed $sample.novel.exons.2reads.filter.bed
-rm $sample.novel.exons.2reads.filter00.bed
+#rm $sample.novel.exons.2reads.filter00.bed
 
 echo
 echo "Getting 2read circRNA info for use with NMD test"
@@ -118,8 +118,8 @@ bedtools map -nonamecheck -f 0.95 -F 0.95 -c 4,7 -o distinct -a $sample.scan.cir
 
 bedtools map -nonamecheck -c 7 -o distinct -a temp.genomic-exons.bed -b reads.annot.temp.bed | awk 'OFS="\t"{print $4,$2,$3,$1,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15}' | sortBed > $sample.scan.circRNA.psl.genomic-exons.annot.bed
 
-rm reads.annot.temp.bed temp.genomic-exons.bed $sample.scan.circRNA.psl.split.merge.flank2.posExons.bed $sample.scan.circRNA.psl.split.merge.flank2.negExons.bed
-rm $sample.scan.circRNA.psl.annot.combine.sort.txt
+#rm reads.annot.temp.bed temp.genomic-exons.bed $sample.scan.circRNA.psl.split.merge.flank2.posExons.bed $sample.scan.circRNA.psl.split.merge.flank2.negExons.bed
+#rm $sample.scan.circRNA.psl.annot.combine.sort.txt
 
 
 
@@ -139,7 +139,7 @@ rm -rf temp1 temp2 $tmp_dir
 input=$sample.scan.circRNA.psl.genomic-exons.annot.uniq.bed
 
 touch circRNA_exon_usage.txt
-rm circRNA_exon_usage.txt
+#rm circRNA_exon_usage.txt
 
 mkdir exon_usage_data
 
@@ -210,7 +210,7 @@ cat $sample.circRNA_exon_usage_filter.txt | awk '$2>9' | awk '{ if ( $5 != "." )
 cat $sample.circ_circRNA_exon_usage_length_of_exons.temp.txt | awk '{print $5}' | sed 's/_chr/\tchr/g' | awk '{print $2}' > coordinate.temp
 cat coordinate.temp | sed 's/:/\t/g' | sed 's/-/\t/g' | awk 'OFS="\t"{print $2, $3, $3-$2}' > start_end_size
 paste $sample.circ_circRNA_exon_usage_length_of_exons.temp.txt start_end_size >> $sample.circ_circRNA_exon_usage_length_of_exons.txt
-rm coordinate.temp start_end_size $sample.circ_circRNA_exon_usage_length_of_exons.temp.txt
+#rm coordinate.temp start_end_size $sample.circ_circRNA_exon_usage_length_of_exons.temp.txt
 
 
 echo "Done with novel exons and alternative usage"
