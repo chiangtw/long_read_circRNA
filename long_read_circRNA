@@ -10,7 +10,7 @@ long_read_circRNA_dir = os.environ.get('LONG_READ_CIRCRNA_DIR', '~/long_read_cir
 
 class ArgumentCaller():
     
-    __version__ = 2
+    __version__ = 2.1
     
     def __init__(self):
         print(

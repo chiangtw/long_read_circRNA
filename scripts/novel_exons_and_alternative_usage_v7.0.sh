@@ -4,10 +4,6 @@
 #SBATCH --mem=64g
 #SBATCH --time=12:00:00
 
-#source /com/extra/ucsc/2015-04-21/load.sh
-# bedtools v2.27.1 fails due to a bug in BEDtools merge (not reporting strand after merge)
-#source /com/extra/bedtools/2.25.0/load.sh
-export PATH=~/omiicsTransfer/software/bedtools2/bin/:$PATH
 
 sample=$1
 organism=$2
@@ -30,19 +26,18 @@ then
 genomeSize=$reference_path/human/hg19.chrom.sizes
 fa=$reference_path/human/hg19.fa
 exon_refseq=$reference_path/human/Human_refFlat_exon_hg19_Oct2018.sort.bed
-#exon=$reference_path/human/gencode.v29lift37.annotation.gffread.exon.merge.bed
 exon_original=$reference_path/human/gencode.v37lift37.annotation.gffread.exon.merge.bed
 exon_full=$reference_path/human/gencode.v37lift37.annotation.gffread.exon.bed
 intron_ucsc=$reference_path/human/hg19_ucsc_Intron_Gencode_V34lift37.bed
 elif [ $organism == "mouse" ]
 then
 ### Mouse
-genomeSize=$reference_path/human/mm10.chrom.sizes
-fa=$reference_path/human/GRCm38.p6.genome_simple.fa
-exon_refseq=$reference_path/human/Mouse_refFlat_exon_mm10_Oct2018.sort.bed
-exon_original=$reference_path/human/gencode.vM25.annotation.gffread.exon.merge.bed
-exon_full=$reference_path/human/gencode.vM25.annotation.gffread.exon.bed
-intron_ucsc=$reference_path/human/mm10_ucsc_Intron_Gencode_VM23.bed
+genomeSize=$reference_path/mouse/mm10.chrom.sizes
+fa=$reference_path/mouse/Mus_musculus.GRCm38.87.chr-fix.fa
+exon_refseq=$reference_path/mouse/Mouse_refFlat_exon_mm10_Oct2018.sort.bed
+exon_original=$reference_path/mouse/gencode.vM25.annotation.gffread.exon.merge.bed
+exon_full=$reference_path/mouse/gencode.vM25.annotation.gffread.exon.bed
+intron_ucsc=$reference_path/mouse/mm10_ucsc_Intron_Gencode_VM23.bed
 fi
 
 echo "Reformating annotation files"
@@ -130,7 +125,7 @@ tmp_dir=$(mktemp -d -t job-XXXXXXXXXX)
 cat $sample.scan.circRNA.psl.genomic-exons.annot.bed | awk 'OFS="\t"{print $13,$14,$15}' | sort -k 1,1 -T $tmp_dir > temp1
 cat temp1 | sort -k 2,2 -T $tmp_dir > temp2
 cat temp2 | sort -k 3,3 -T $tmp_dir | uniq -c > $sample.scan.circRNA.psl.genomic-exons.annot.uniq.bed
-rm -rf temp1 temp2 $tmp_dir
+rm -rf $tmp_dir
 
 
 
@@ -324,7 +319,8 @@ then
           -I '*novel.exons.2reads.filter.bed' -I '*novel.exons.2reads.phases.tab' \
           -I '*novel.cryptic.spliced.exons.txt' -I '*circ_circRNA_exon_usage_length_of_exons.txt' \
           -I '*introns.uniq.exon_remove.coverage.onlyCirc.novelExonMap.intronCov.bed' \
-          -I '*Potential_multi-round_circRNA.fa' -I '*Potential_multi-round_circRNA.psl.annot*' | xargs rm
+          -I '*Potential_multi-round_circRNA.fa' -I '*Potential_multi-round_circRNA.psl.annot*' \
+          -I '*bam' -I '*bai' -I '*bw' | xargs rm
 
 else
         echo "Keeping all of the temporary output files"
