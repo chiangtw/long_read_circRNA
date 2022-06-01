@@ -10,6 +10,7 @@
 
 
 data_folder=$1
+sample_filename=$7
 sample=$2
 species=$3
 reference_path=$4
@@ -51,6 +52,16 @@ circRNA_prefix=mmu_circ_
 fi
 
 
+function cat_or_zcat {
+    filename=$1
+    if [[ "$filename" =~ "\.gz$" ]]; then
+        zcat $filename
+    else
+        cat $filename
+    fi
+}
+
+
 # Temp folder
 temp_sort=$(mktemp -d /tmp/foo.XXXXXXXXX)
 
@@ -59,15 +70,15 @@ date
 echo "Sample: "$sample
 echo
 echo "Number of raw reads before NanoFilt -q 7 -l 250"
-zcat $data_folder/$sample.fq.gz | wc -l | awk '{print $1/4}'
+cat_or_zcat $data_folder/$sample_filename | wc -l | awk '{print $1/4}'
 #echo
 #echo "Dates when reads were sequenced:"
-#zcat $data_folder/$sample.fq.gz | grep "start_time=" | sed 's/start_time=/;/g' | cut -d \; -f 2 | sed 's/T/ /g'  | awk '{print $1}'  | sort | uniq -c | sort -nrk 1,1
+#cat_or_zcat $data_folder/$sample_filename | grep "start_time=" | sed 's/start_time=/;/g' | cut -d \; -f 2 | sed 's/T/ /g'  | awk '{print $1}'  | sort | uniq -c | sort -nrk 1,1
 
 echo
 date
 echo "NanoFilt to remove reads under quality 7 and conversion to fasta"
-zcat $data_folder/$sample.fq.gz | NanoFilt -q 7 -l 250 | sed -n '1~4s/^@/>/p;2~4p' > $sample.fa
+cat_or_zcat $data_folder/$sample_filename | NanoFilt -q 7 -l 250 | sed -n '1~4s/^@/>/p;2~4p' > $sample.fa
 echo
 date
 echo "Number of filtered reads after NanoFilt -q 7 -l 250"

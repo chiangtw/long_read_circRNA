@@ -5,6 +5,7 @@ import sys
 import os
 from pathlib import Path
 import subprocess
+import re
 
 long_read_circRNA_dir = os.environ.get('LONG_READ_CIRCRNA_DIR', '~/long_read_circRNA')
 
@@ -50,7 +51,7 @@ Available subcommands:
             #usage="%(prog)s run sample [options]"
         )
         
-        parser.add_argument('sample', help="Provide a sample input .fq.gz file that should be processed by the tool")
+        parser.add_argument('sample', help="Provide a sample input file that should be processed by the tool")
         parser.add_argument('--reference-path', default="./data", help="Provide a path for where the reference data is located. Default is './data'.")
         parser.add_argument('--species', default='human', choices=['human', 'mouse'], help="Select which species the sample that is from, and specify which species reference files should be used. Default is set to human.")
         parser.add_argument('--script-path', default="{}/scripts".format(long_read_circRNA_dir), help="Specify where the long_read_circRNA scripts are located. By default it assumes that they are located at '~/long_read_circRNA/scripts'.")
@@ -86,13 +87,11 @@ Available subcommands:
         # Check if sample exists
         if not os.path.exists(args.sample):
             raise Exception("Sample file '{}' does not exist!".format(args.sample))
-        # Check if sample ends with ".fq.gz"
-        if not args.sample.endswith(".fq.gz"):
-            raise Exception("Sample file '{}' does not end with '.fq.gz'".format(args.sample))
         # Prepare sample_path and sample_name
         reference_path = str(Path(reference_path).resolve())
         sample_path = str(Path(os.path.dirname(args.sample)).resolve())
-        sample_name = os.path.basename(args.sample).replace('.fq.gz', '')
+        sample_filename = os.path.basename(args.sample)
+        sample_name = re.sub(r'\.f(?:ast)?q(?:\.gz)?$', '', sample_filename)
         
         script_path = str(Path(os.path.expanduser(args.script_path)).resolve())
         output_path = str(Path(args.output_path).resolve())
@@ -126,7 +125,7 @@ Available subcommands:
             # Main process for circRNA detection
             print("\033[1m")
             subprocess.run(["bash", os.path.join(script_path, "blat_nanopore_v5.5.sh"), 
-                            sample_path, sample_name, species, reference_path, script_path, output_path])
+                            sample_path, sample_name, species, reference_path, script_path, output_path, sample_filename])
             print("\033[0m")
         
             print("\033[1mcircRNA detection has finished\033[0m")
