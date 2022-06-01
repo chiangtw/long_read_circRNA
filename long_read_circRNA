@@ -58,6 +58,7 @@ Available subcommands:
         parser.add_argument('--output-path', '-o', default=".", help="Provide a path for where the output should be saved. Default is the current directory. This will use the output-path and create a directory in that path based on the sample name provided.")
         parser.add_argument('--dry-run', action="store_true", help="Perform all of the input checks without starting the detection scripts")
         parser.add_argument('--keep-temp', action="store_true", help="Keep all of the temporary files.")
+        parser.add_argument('--threads', default=8, type=int, help="Provide the number of threads.")
         
         args = parser.parse_args(sys.argv[2:])
     
@@ -125,7 +126,7 @@ Available subcommands:
             # Main process for circRNA detection
             print("\033[1m")
             subprocess.run(["bash", os.path.join(script_path, "blat_nanopore_v5.5.sh"), 
-                            sample_path, sample_name, species, reference_path, script_path, output_path, sample_filename])
+                            sample_path, sample_name, species, reference_path, script_path, output_path, sample_filename, str(args.threads)])
             print("\033[0m")
         
             print("\033[1mcircRNA detection has finished\033[0m")

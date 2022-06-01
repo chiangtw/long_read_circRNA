@@ -15,6 +15,7 @@ sample=$2
 species=$3
 reference_path=$4
 scriptFolder=$5
+threads=$8
 
 mkdir $6
 cd $6
@@ -88,7 +89,7 @@ date
 echo "Mapping with pblat - parallelized blat with multi-threads support (http://icebert.github.io/pblat/)"
 echo "lower case sequences in the genome file are masked out"
 echo "Showing a dot for every 50k sequences processed"
-pblat  -threads=8 -trimT -dots=50000 -mask=lower $fa $sample.fa $sample.psl
+pblat  -threads=$threads -trimT -dots=50000 -mask=lower $fa $sample.fa $sample.psl
 echo "Blat done"
 date
 
@@ -134,14 +135,14 @@ bedtools bedtobam -i $sample.psl.bed -bed12 -g $genomeSize > $sample.bam
 samtools sort $sample.bam > $sample.sort.bam
 samtools index $sample.sort.bam
 rm $sample.bam
-bamCoverage --binSize 1 --numberOfProcessors 8 -b $sample.sort.bam -o $sample.bw
+bamCoverage --binSize 1 --numberOfProcessors $threads -b $sample.sort.bam -o $sample.bw
 
 # Blat mapped BSJ spanning reads
 bedtools bedtobam -i $sample.scan.circRNA.psl.bed -bed12 -g $genomeSize > $sample.circRNA.bam
 samtools sort $sample.circRNA.bam > $sample.circRNA.sort.bam
 samtools index $sample.circRNA.sort.bam
 rm $sample.circRNA.bam
-bamCoverage --binSize 1 --numberOfProcessors 8 -b $sample.circRNA.sort.bam -o $sample.circRNA.bw
+bamCoverage --binSize 1 --numberOfProcessors $threads -b $sample.circRNA.sort.bam -o $sample.circRNA.bw
 
 
 
