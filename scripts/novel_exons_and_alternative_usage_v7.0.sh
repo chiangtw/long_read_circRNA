@@ -160,7 +160,7 @@ while IFS='' read -r circRNA || [[ -n "$circRNA" ]]; do
 #        echo
 
 	#Note: This removes novel exons with fewer than 50 reads. Only for panel datasets. Otherwise use cut off 10
-        grep $circRNA $input | awk '{print $3}' | sed 's/,/\n/g' | sort | uniq | grep -v "^[123456789]read_novelExon" | grep -v "^[123][1234567890]read_novelExon" | grep -v "^4[123456789]read_novelExon" > temp_exon_list
+        grep $circRNA $input | awk '{print $3}' | sed 's/,/\n/g' | sort | uniq | grep -v -E "^[1-4]?[0-9]read_novelExon" > temp_exon_list
         #echo
         echo "circRNA: "$circRNA > exon_usage.log
         #echo "exons in circRNA"
