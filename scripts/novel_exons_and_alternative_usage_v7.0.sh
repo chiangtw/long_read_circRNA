@@ -263,7 +263,7 @@ bedtools subtract -a introns.uniq.bed -b exon_annotation.reformat.bed -nonameche
 
 echo "Getting read coverage in introns"
 ## This was changed in v2 so the intron retention is now only searched in bsj spanning reads, not all reads as before
-bedtools coverage -bed -split -a introns.uniq.exon_remove.bed -b $sample.scan.circRNA.sort.bam > $sample.intron.coverage
+bedtools coverage -bed -split -a introns.uniq.exon_remove.bed -b $sample.circRNA.sort.bam > $sample.intron.coverage
 echo "extracting the introns with >50% of nt covered by reads"
 cat $sample.intron.coverage | awk '$10>0.5' > $sample.intron.coverage.50pct
 # CircRNAs with more than 1% intronic coverage, if harboring a >50% coverage intron this is shown in last column
