@@ -138,6 +138,8 @@ rm circRNA_exon_usage.txt
 
 mkdir exon_usage_data
 
+NAME_MAX=$(getconf -a | awk '($1=="NAME_MAX"){print $2}')
+
 cat $input | awk '{print $4}' | sort | uniq | awk '{if ($1 != ".") print $1}'> circRNA-list
 echo
 echo "Getting circRNA exon usage"
@@ -167,11 +169,12 @@ while IFS='' read -r circRNA || [[ -n "$circRNA" ]]; do
         #cat temp_exon_list
         #echo
 
+        circRNA_exon_usage_tmp=$(echo $circRNA.circRNA_exon_usage.txt | cut -c "-$NAME_MAX")
 
         while IFS='' read -r exon || [[ -n "$exon" ]]; do
                 exon_hit=$(grep $circRNA $sample.scan.circRNA.psl.genomic-exons.annot.uniq.bed | awk '{print $1,$2}' | grep $exon | awk '{split($0,a,","); sum += a[1]} END {print sum}')
                 circRNA_coverage=$(grep $circRNA $sample.scan.circRNA.psl.genomic-exons.annot.uniq.bed | awk '{print $1,$3}' | grep $exon | awk '{split($0,a,","); sum += a[1]} END {print sum}')
-                printf "$circRNA\t$exon_hit\t$circRNA_coverage\t$exon" | awk 'OFS="\t"{if($3 != 0) {print $1,$2,$3,$2/$3,$4;}}' >> exon_usage_data/$circRNA.circRNA_exon_usage.txt 2>> exon_usage.log
+                printf "$circRNA\t$exon_hit\t$circRNA_coverage\t$exon" | awk 'OFS="\t"{if($3 != 0) {print $1,$2,$3,$2/$3,$4;}}' >> exon_usage_data/$circRNA_exon_usage_tmp 2>> exon_usage.log
 
         done < temp_exon_list
 
